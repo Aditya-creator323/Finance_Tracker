@@ -3,7 +3,7 @@ import './App.css';
 function App() {
   return (
     <div>
-      Personal Finance Tracker
+      Personal Finance Tracker New one
     </div>
   );
 }
