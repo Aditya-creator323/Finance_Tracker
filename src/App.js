@@ -1,9 +1,10 @@
 import './App.css';
+import Dashboard from './components/Dashboard';
 
 function App() {
   return (
     <div>
-      Personal Finance Tracker New one
+      <Dashboard />
     </div>
   );
 }
