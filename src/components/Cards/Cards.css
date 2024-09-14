@@ -1,13 +1,79 @@
-.my-card {
-    box-shadow: var(--shadow);
-    min-width: 400px;
-    border: 2px solid black;
-}
-
-.my-row {
+/* General container styling */
+.cards-container {
+    padding: 20px;
+    background-color: #f0f2f5;
+  }
+  
+  /* Row styling for responsive layout */
+  .my-row {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 2rem auto;
-    width: 90%;
-}
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  
+  /* Card styling */
+  .my-card {
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+  }
+  
+  /* Hover effect for cards */
+  .my-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Current Balance Card */
+  .current-balance {
+    background-color: #e0f7fa;
+    border-color: #00acc1;
+  }
+  
+  .balance-amount {
+    font-size: 24px;
+    font-weight: bold;
+    color: #00acc1;
+  }
+  
+  /* Income Card */
+  .income-card {
+    background-color: #e8f5e9;
+    border-color: #4caf50;
+  }
+  
+  .income-amount {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4caf50;
+  }
+  
+  /* Expenses Card */
+  .expense-card {
+    background-color: #ffebee;
+    border-color: #e53935;
+  }
+  
+  .expense-amount {
+    font-size: 24px;
+    font-weight: bold;
+    color: #e53935;
+  }
+  
+  /* Button styling */
+  .reset-btn,
+  .income-btn,
+  .expense-btn {
+    margin-top: 10px;
+    border-radius: 8px;
+    width: 100%;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .my-card {
+      margin-bottom: 20px;
+    }
+  }
+  

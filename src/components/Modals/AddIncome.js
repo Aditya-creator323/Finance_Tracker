@@ -1,10 +1,11 @@
 import { Button, Form, Modal, Input, DatePicker, Select } from "antd";
-import React, { useState } from "react";
+import React from "react";
 
 export default function AddIncome({
   isIncomeModalVisible,
   handleIncomeCancel,
   onFinish,
+  handleChange,
 }) {
   const [form] = Form.useForm();
   return (
@@ -40,6 +41,7 @@ export default function AddIncome({
             style={{ fontWeight: 600 }}
             label="Amount"
             name="amount"
+
             rules={[
               {
                 required: true,
@@ -68,7 +70,7 @@ export default function AddIncome({
             name="tag"
             rules={[{ required: true, message: "Please select a tag!" }]}
           >
-            <Select className="select-input-2">
+            <Select type="text" className="select-input-2">
               <Select.Option value="salary">Salary</Select.Option>
               <Select.Option value="freelance">Freelance</Select.Option>
               <Select.Option value="investment">Investment</Select.Option>

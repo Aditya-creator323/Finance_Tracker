@@ -1,7 +1,8 @@
 import React from 'react'
+import "./Header.css";
 
 export default function Header() {
   return (
-    <div>Personal Finance Tracker</div>
+    <div className='header'>Personal Finance Tracker</div>
   )
 }

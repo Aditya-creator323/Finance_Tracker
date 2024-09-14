@@ -1,0 +1,21 @@
+/* Styling the header container */
+.header {
+    background-color: #009879;  /* Give a nice primary background color */
+    color: #ffffff;  /* Text color */
+    text-align: center;  /* Center-align the text */
+    padding: 20px;  /* Add some padding for spacing */
+    font-size: 2rem;  /* Increase the font size */
+    font-weight: bold;  /* Make the font bold */
+    letter-spacing: 2px;  /* Add letter spacing for a modern look */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Slight shadow for depth */
+    margin-bottom: 20px;  /* Add margin at the bottom to separate from the content below */
+  }
+  
+  /* Responsive behavior */
+  @media (max-width: 768px) {
+    div {
+      font-size: 1.5rem;  /* Slightly smaller font for smaller screens */
+      padding: 15px;
+    }
+  }
+  
