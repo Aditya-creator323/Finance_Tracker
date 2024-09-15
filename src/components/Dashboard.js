@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import Header from "./Header/Header";
 import Cards from "./Cards/Cards";
 import AddExpense from "./Modals/AddExpense";
 import AddIncome from "./Modals/AddIncome";
 import Table from "./Table/Table";
-import { Card, Row } from "antd";
-import Line from "./Charts/Line";
 
-export default function () {
+export default function Dashboard() {
   const [isIncomeModalVisible, setIsIncomeModalVisible] = useState(false);
   const [isExpenseModalVisible, setIsExpenseModalVisible] = useState(false);
   const [transactions, setTransactions] = useState([]);
@@ -16,9 +15,13 @@ export default function () {
   const [income, setIncome] = useState(0);
   const [expense, setExpense] = useState(0);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [incomeData, setIncomeData] = useState([]);
+  const [expenseData, setExpenseData] = useState([]);
+
+  // Pie chart colors
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   useEffect(() => {
-    console.log("first UseEffect is called");
     fetch("http://localhost:8080/getBalanceInfo")
       .then((response) => response.json())
       .then((data) => {
@@ -26,15 +29,14 @@ export default function () {
         setExpense(data.totalExpense);
         setCurrentBalance(data.currentBalance);
         setIsInitialLoad(false);
-        console.log("data from useState : ", data);
       })
       .catch((error) => console.log("Error from useState : ", error));
 
     fetch("http://localhost:8080/transactions")
       .then((response) => response.json())
       .then((data) => {
-        console.log("transactions data : ", data);
         setTableData(data);
+        processChartData(data);
       })
       .catch((error) =>
         console.log("Error in retrieving transaction data", error)
@@ -42,22 +44,44 @@ export default function () {
   }, []);
 
   useEffect(() => {
-    console.log(
-      "Income : ",
-      income,
-      " Expense : ",
-      expense,
-      " CUrrent Balance : ",
-      currentBalance
-    );
     if (
       !isInitialLoad &&
       (income !== 0 || expense !== 0 || currentBalance !== 0)
     ) {
-      console.log("second UseEffect is called");
       handleAddBalanceInfo();
     }
   }, [income, expense, currentBalance]);
+
+  const processChartData = (data) => {
+    const incomeCategories = {};
+    const expenseCategories = {};
+
+    data.forEach((transaction) => {
+      if (transaction.type === "income") {
+        incomeCategories[transaction.tag] =
+          (incomeCategories[transaction.tag] || 0) +
+          parseFloat(transaction.amount);
+      } else {
+        expenseCategories[transaction.tag] =
+          (expenseCategories[transaction.tag] || 0) +
+          parseFloat(transaction.amount);
+      }
+    });
+
+    setIncomeData(
+      Object.keys(incomeCategories).map((key) => ({
+        name: key,
+        value: incomeCategories[key],
+      }))
+    );
+
+    setExpenseData(
+      Object.keys(expenseCategories).map((key) => ({
+        name: key,
+        value: expenseCategories[key],
+      }))
+    );
+  };
 
   const showIncomeModal = () => {
     setIsIncomeModalVisible(true);
@@ -113,13 +137,13 @@ export default function () {
       .then((response) => response.json())
       .then((data) => {
         setTableData([...tableData, data]);
+        processChartData([...tableData, data]); // update pie chart data
         calculateBalance();
       })
       .catch((error) => console.error("Error  : ", error));
   };
 
   const handleAddBalanceInfo = () => {
-    console.log("handleAddBalanceInfo is called");
     const safeCurrentBalance =
       currentBalance !== undefined ? currentBalance.toString() : "0";
     const safeIncome = income !== undefined ? income.toString() : "0";
@@ -167,14 +191,6 @@ export default function () {
     setCurrentBalance(incomeTotal - expenseTotal);
   };
 
-  const cardStyle = {
-    boxShadow: "0px 0px 30px 8px rgba(227, 227, 227, 0.75)",
-    margin: "2rem",
-    borderRadius: "0.5rem",
-    minWidth: "400px",
-    flex: 1,
-  };
-
   return (
     <div>
       <Header />
@@ -191,27 +207,69 @@ export default function () {
         isIncomeModalVisible={isIncomeModalVisible}
         handleIncomeCancel={handleIncomeCancel}
         onFinish={onFinish}
-        // handleChange={handleChange}
       />
 
       <AddExpense
         isExpenseModalVisible={isExpenseModalVisible}
         handleExpenseCancel={handleExpenseCancel}
         onFinish={onFinish}
-        // handleChange={handleChange}
       />
 
-      <Line 
-        date={tableData.date}
-        amount={tableData.amount}
-      />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          // marginTop: "20px",
+        }}
+      >
+        {incomeData.length > 0 && (
+          <PieChart width={600} height={400}>
+            <Pie
+              data={incomeData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={150}
+              fill="#82ca9d"
+              label
+            >
+              {incomeData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        )}
 
-      {/* <Row gutter={16}>
-        <Card bordered={true} style={cardStyle}>
-          <h2>Financial Statistics</h2>
-          <Line
-        </Card>
-      </Row> */}
+        {expenseData.length > 0 && (
+          <PieChart width={600} height={400}>
+            <Pie
+              data={expenseData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={150}
+              fill="#8884d8"
+              label
+            >
+              {expenseData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        )}
+      </div>
 
       <Table tableData={tableData} />
     </div>

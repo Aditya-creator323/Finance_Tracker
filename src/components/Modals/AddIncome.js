@@ -41,7 +41,6 @@ export default function AddIncome({
             style={{ fontWeight: 600 }}
             label="Amount"
             name="amount"
-
             rules={[
               {
                 required: true,
