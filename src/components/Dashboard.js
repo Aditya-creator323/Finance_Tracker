@@ -25,9 +25,10 @@ export default function Dashboard() {
     fetch("http://localhost:8080/getBalanceInfo")
       .then((response) => response.json())
       .then((data) => {
-        setIncome(data.totalIncome);
-        setExpense(data.totalExpense);
-        setCurrentBalance(data.currentBalance);
+        console.log("data : ", data[0].totalIncome)
+        setIncome(data[0].totalIncome ? data[0].totalIncome : 0);
+        setExpense(data[0].totalExpense ? data[0].totalExpense : 0);
+        setCurrentBalance(data[0].currentBalance ? data[0].currentBalance : 0);
         setIsInitialLoad(false);
       })
       .catch((error) => console.log("Error from useState : ", error));
@@ -42,15 +43,6 @@ export default function Dashboard() {
         console.log("Error in retrieving transaction data", error)
       );
   }, []);
-
-  useEffect(() => {
-    if (
-      !isInitialLoad &&
-      (income !== 0 || expense !== 0 || currentBalance !== 0)
-    ) {
-      handleAddBalanceInfo();
-    }
-  }, [income, expense, currentBalance]);
 
   const processChartData = (data) => {
     const incomeCategories = {};
@@ -138,21 +130,17 @@ export default function Dashboard() {
       .then((data) => {
         setTableData([...tableData, data]);
         processChartData([...tableData, data]); // update pie chart data
-        calculateBalance();
+        console.log("Inside halndleAddTrans");
+        calculateBalance(newTransaction);
       })
       .catch((error) => console.error("Error  : ", error));
   };
 
-  const handleAddBalanceInfo = () => {
-    const safeCurrentBalance =
-      currentBalance !== undefined ? currentBalance.toString() : "0";
-    const safeIncome = income !== undefined ? income.toString() : "0";
-    const safeExpense = expense !== undefined ? expense.toString() : "0";
-
+  const handleAddBalanceInfo = (newCurrBalance, incomeTotal, expenseTotal) => {
     const queryParams = new URLSearchParams({
-      current_balance: safeCurrentBalance,
-      total_income: safeIncome,
-      total_expense: safeExpense,
+      current_balance: newCurrBalance,
+      total_income: incomeTotal,
+      total_expense: expenseTotal,
     });
 
     fetch(`http://localhost:8080/addBalanceInfo?${queryParams.toString()}`, {
@@ -170,25 +158,22 @@ export default function Dashboard() {
       .catch((error) => console.error("Error  : ", error));
   };
 
-  useEffect(() => {
-    calculateBalance();
-  }, [transactions]);
+  const calculateBalance = (newTransaction) => {
+    console.log("CalculateBalance is called");
+    let incomeTotal = income;
+    let expenseTotal = expense;
 
-  const calculateBalance = () => {
-    let incomeTotal = 0;
-    let expenseTotal = 0;
+    if (newTransaction.type === "income") {
+      incomeTotal += parseFloat(newTransaction.amount);
+      setIncome(incomeTotal);
+    } else {
+      expenseTotal += parseFloat(newTransaction.amount);
+      setExpense(expenseTotal);
+    }
 
-    transactions.forEach((transaction) => {
-      if (transaction.type === "income") {
-        incomeTotal += parseFloat(transaction.amount);
-      } else {
-        expenseTotal += parseFloat(transaction.amount);
-      }
-    });
-
-    setIncome(incomeTotal);
-    setExpense(expenseTotal);
-    setCurrentBalance(incomeTotal - expenseTotal);
+    const newCurrBalance = incomeTotal - expenseTotal;
+    setCurrentBalance(newCurrBalance);
+    handleAddBalanceInfo(newCurrBalance, incomeTotal, expenseTotal);
   };
 
   return (
