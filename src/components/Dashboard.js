@@ -5,6 +5,7 @@ import Cards from "./Cards/Cards";
 import AddExpense from "./Modals/AddExpense";
 import AddIncome from "./Modals/AddIncome";
 import Table from "./Table/Table";
+import NoTransaction from "./NoTransaction";
 
 export default function Dashboard() {
   const [isIncomeModalVisible, setIsIncomeModalVisible] = useState(false);
@@ -25,7 +26,7 @@ export default function Dashboard() {
     fetch("http://localhost:8080/getBalanceInfo")
       .then((response) => response.json())
       .then((data) => {
-        console.log("data : ", data[0].totalIncome)
+        console.log("data : ", data[0].totalIncome);
         setIncome(data[0].totalIncome ? data[0].totalIncome : 0);
         setExpense(data[0].totalExpense ? data[0].totalExpense : 0);
         setCurrentBalance(data[0].currentBalance ? data[0].currentBalance : 0);
@@ -200,63 +201,67 @@ export default function Dashboard() {
         onFinish={onFinish}
       />
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          // marginTop: "20px",
-        }}
-      >
-        {incomeData.length > 0 && (
-          <PieChart width={600} height={400}>
-            <Pie
-              data={incomeData}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              outerRadius={150}
-              fill="#82ca9d"
-              label
-            >
-              {incomeData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        )}
+      {tableData.length > 0 ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            // marginTop: "20px",
+          }}
+        >
+          {incomeData.length > 0 && (
+            <PieChart width={600} height={400}>
+              <Pie
+                data={incomeData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={150}
+                fill="#82ca9d"
+                label
+              >
+                {incomeData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          )}
 
-        {expenseData.length > 0 && (
-          <PieChart width={600} height={400}>
-            <Pie
-              data={expenseData}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              outerRadius={150}
-              fill="#8884d8"
-              label
-            >
-              {expenseData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        )}
-      </div>
+          {expenseData.length > 0 && (
+            <PieChart width={600} height={400}>
+              <Pie
+                data={expenseData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={150}
+                fill="#8884d8"
+                label
+              >
+                {expenseData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          )}
+        </div>
+      ) : (
+        <NoTransaction />
+      )}
 
-      <Table tableData={tableData} />
+      {tableData.length > 0 && <Table tableData={tableData} />}
     </div>
   );
 }
