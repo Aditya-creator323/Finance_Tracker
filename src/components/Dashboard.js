@@ -206,56 +206,61 @@ export default function Dashboard() {
           style={{
             display: "flex",
             justifyContent: "space-around",
-            // marginTop: "20px",
           }}
         >
-          {incomeData.length > 0 && (
-            <PieChart width={600} height={400}>
-              <Pie
-                data={incomeData}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={150}
-                fill="#82ca9d"
-                label
-              >
-                {incomeData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          )}
+          <div style={{ textAlign: "center", marginTop: "20px" }}>
+            <h2>Total Earning</h2>
+            {incomeData.length > 0 && (
+              <PieChart width={600} height={400}>
+                <Pie
+                  data={incomeData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={150}
+                  fill="#82ca9d"
+                  label
+                >
+                  {incomeData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            )}
+          </div>
 
-          {expenseData.length > 0 && (
-            <PieChart width={600} height={400}>
-              <Pie
-                data={expenseData}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={150}
-                fill="#8884d8"
-                label
-              >
-                {expenseData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          )}
+          <div style={{ textAlign: "center", marginTop: "20px" }}>
+            <h2>Total Spendings</h2>
+            {expenseData.length > 0 && (
+              <PieChart width={600} height={400}>
+                <Pie
+                  data={expenseData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={150}
+                  fill="#8884d8"
+                  label
+                >
+                  {expenseData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            )}
+          </div>
         </div>
       ) : (
         <NoTransaction />

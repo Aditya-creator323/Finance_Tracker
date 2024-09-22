@@ -1,21 +1,62 @@
-/* Styling the header container */
-.header {
-    background-color: #009879;  /* Give a nice primary background color */
-    color: #ffffff;  /* Text color */
-    text-align: center;  /* Center-align the text */
-    padding: 20px;  /* Add some padding for spacing */
-    font-size: 2rem;  /* Increase the font size */
-    font-weight: bold;  /* Make the font bold */
-    letter-spacing: 2px;  /* Add letter spacing for a modern look */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Slight shadow for depth */
-    margin-bottom: 20px;  /* Add margin at the bottom to separate from the content below */
+/* .header {
+    background-color: #009879;  
+    color: #ffffff;  
+    text-align: center;
+    padding: 20px;
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
   }
   
-  /* Responsive behavior */
   @media (max-width: 768px) {
     div {
-      font-size: 1.5rem;  /* Slightly smaller font for smaller screens */
+      font-size: 1.5rem;
       padding: 15px;
     }
   }
+   */
+
+   .header-container {
+    background-color: #6bbe6e; /* A single background color for the entire header */
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow for depth */
+  }
+  
+  .header {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+  
+  nav ul li {
+    margin-left: 20px;
+  }
+  
+  nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  nav ul li a:hover {
+    background-color: #3e8e41; /* A slightly darker green on hover */
+  }
+  
   
