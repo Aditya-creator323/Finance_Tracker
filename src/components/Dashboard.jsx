@@ -101,6 +101,8 @@ export default function Dashboard() {
       type: type,
     };
 
+    console.log("Going inside OnFinish");
+
     setTransactions([...transactions, newTransaction]);
     setIsIncomeModalVisible(false);
     setIsExpenseModalVisible(false);
@@ -110,7 +112,7 @@ export default function Dashboard() {
   const handleAddTransaction = (newTransaction) => {
     const formattedDate = new Date(newTransaction.date)
       .toISOString()
-      .split("T")[0]; // Ensure correct format
+      .split("T")[0];
 
     const queryParams = new URLSearchParams({
       name: newTransaction.name,

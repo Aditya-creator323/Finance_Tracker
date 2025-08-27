@@ -6,15 +6,11 @@ import Signup from './components/Authentication/Signup';
 
 function App() {
   return (
-    // <div>
-    //   <Dashboard />
-    // </div>
-
     <Router>
       <Routes>
         <Route path='/login' element={<Login />}/>
         <Route path='/signup' element={<Signup />}/>
-        <Route path='/' element={<Dashboard />}/>
+        <Route path='/Finance_Tracker' element={<Dashboard />}/>
       </Routes>
     </Router>
   );
